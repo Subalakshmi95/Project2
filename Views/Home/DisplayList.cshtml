@@ -1,0 +1,62 @@
+﻿@model Project2.Models.BookingPageView
+
+@{
+    ViewData["Title"] = "Bookings List";
+}
+
+<h2>Bookings List</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Date</th>
+            <th>Photo</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var booking in Model.Bookings)
+        {
+            <tr>
+                <td>@booking.Id</td>
+                <td>@booking.Name</td>
+                <td>@booking.Email</td>
+                <td>@booking.Password</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(booking.PhotoPath))
+                    {
+                        <img src="@booking.PhotoPath" alt="Booking Photo" width="100" height="100" />
+                    }
+                    else
+                    {
+                        <span>No Photo</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@booking.Id" class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@booking.Id" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="pagination">
+    @if (Model.CurrentPage > 1)
+    {
+        <a asp-action="DisplayList" asp-route-pageNumber="@(Model.CurrentPage - 1)" class="btn btn-secondary">Previous</a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a asp-action="DisplayList" asp-route-pageNumber="@i" class="@(i == Model.CurrentPage ? "btn btn-primary" : "btn btn-secondary")">@i</a>
+    }
+
+    @if (Model.CurrentPage < Model.TotalPages)
+    {
+        <a asp-action="DisplayList" asp-route-pageNumber="@(Model.CurrentPage + 1)" class="btn btn-secondary">Next</a>
+    }
+</div>
+
